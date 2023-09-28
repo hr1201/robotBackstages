@@ -38,5 +38,5 @@ export const getownPlan = (name: string, date: string) => {
 
 // 获取用户时长
 export const getDuration = (groupId:number) => {
-    return http.get('/api2/my/getLastWeekDuration',{ params:{groupId:groupId} })
+    return http.get('/api2/WeekSummary/getLastWeekDuration',{ params:{groupId:groupId} })
 }
