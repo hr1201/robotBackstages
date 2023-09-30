@@ -19,7 +19,7 @@
 <script setup lang='ts'>
 import { computed } from 'vue';
 import { useRouter,useRoute } from 'vue-router'
-import { HomeFilled, UserFilled, Promotion, List } from '@element-plus/icons-vue'
+import { HomeFilled, UserFilled, List, Management } from '@element-plus/icons-vue'
 import { useStore } from '../store/index'
 
 const router = useRouter()
@@ -27,7 +27,7 @@ const router = useRouter()
 // 获取当前页面的url，防止刷新后所在页面焦点移到默认页面
 const route=useRoute()
 const defaultUrl=route.path
-console.log(route.path)
+// console.log(route.path)
 
 // const handleOpen = (key: string, keyPath: string[]) => {
 //     console.log(key, keyPath)
@@ -69,17 +69,24 @@ const itemList: ItemType[] = [
         urlName: '组员管理',
         iconHtml: UserFilled
     },
-    {
-        index: '/dynamicManage',
-        url: 'dynamicManage',
-        urlName: '审核动态',
-        iconHtml: Promotion
-    },
+    // icon图标：Promotion
+    // {
+    //     index: '/dynamicManage',
+    //     url: 'dynamicManage',
+    //     urlName: '审核动态',
+    //     iconHtml: Promotion
+    // },
     {
         index: '/planList',
         url: 'planList',
         urlName: '计划清单',
         iconHtml: List
+    },
+    {
+        index: '/weekly',
+        url: 'weekly',
+        urlName: '组员周报',
+        iconHtml: Management
     },
 ]
 

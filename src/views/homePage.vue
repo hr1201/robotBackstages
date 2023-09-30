@@ -106,7 +106,9 @@ const itemList = computed((): itemType[] => [
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
+    .peopleNum{
+        font-size: 23px;
+    }
     img {
         width: 40px;
         height: 40px;

@@ -7,11 +7,7 @@
                     v-model="dateValue" />
             </div>
             <div class="select">
-                <el-input 
-                    v-model="input1" 
-                    class="w-50 m-2" 
-                    size="large" 
-                    placeholder="请输入组员姓名" />
+                <el-input v-model="input1" class="w-50 m-2" size="large" placeholder="请输入组员姓名" />
                 <el-button :icon="Search" @click="selectChange(input1)" size="large" />
             </div>
         </div>
@@ -76,7 +72,7 @@ import { Sunny, Lightning, WarnTriangleFilled, Search } from '@element-plus/icon
 import { DatePicker } from 'vue-amazing-ui'
 import 'vue-amazing-ui/css'
 
-const user=useStore()
+const user = useStore()
 
 type plan = {
     id: number,
@@ -119,14 +115,14 @@ const unfinished = ref<plan[]>(
 const unwriteName = ref('')
 
 // 将finished和unfinished置空
-function empty():void{
+function empty(): void {
     unfinished.value.length = 0
     finished.value.length = 0
     unwriteName.value = ''
 }
 
 // 用来判断finished和unfinished是否为空
-function isEmpty():void{
+function isEmpty(): void {
     if (finished.value.length === 0) {
         finished.value.push({
             username: '',
@@ -153,7 +149,7 @@ watchEffect(() => {
     getPlan(dateValue.value, user.user.groupId.toString()).then((response) => {
         // 选择其他日期，重新调用此回调函数时，置为空
         empty()
-        
+
         response.data.forEach((value: plan) => {
             if (value.achieve == '已完成') {
                 finished.value.push(value)
@@ -179,7 +175,7 @@ let selectChange: any = (input: string) => {
         getownPlan(input, dateValue.value).then((response) => {
             // 选择其他日期，重新调用此回调函数时，置为空
             empty()
-            
+
             response.data.forEach((value: plan) => {
                 if (value.achieve == '已完成') {
                     finished.value.push(value)
@@ -240,46 +236,29 @@ let selectChange: any = (input: string) => {
             font-size: 19px;
         }
 
-        .grid-content1 {
-
-            // border: solid 2px #0dbc79;
+        .grid-mixin(@color) {
+            // border: solid 2px @color;
             .el-icon {
                 margin-left: 5px;
-                color: #0dbc79;
+                color: @color;
             }
 
             p {
                 padding-left: 5px;
-                color: #0dbc79;
+                color: @color;
             }
+        }
+
+        .grid-content1 {
+            .grid-mixin(#0dbc79);
         }
 
         .grid-content2 {
-
-            // border: solid 2px #dc362e;
-            .el-icon {
-                margin-left: 5px;
-                color: #dc362e;
-            }
-
-            p {
-                padding-left: 5px;
-                color: #dc362e;
-            }
+            .grid-mixin(#dc362e);
         }
 
         .grid-content3 {
-
-            // border: solid 2px #c0c4cc;
-            .el-icon {
-                margin-left: 5px;
-                color: #c0c4cc;
-            }
-
-            p {
-                padding-left: 5px;
-                color: #c0c4cc;
-            }
+            .grid-mixin(#c0c4cc);
         }
     }
 }

@@ -109,7 +109,7 @@ const onSubmit = () => {
     overflow: hidden;
 
     .img-container {
-        // background-color: white;
+        background-color: white;
         height: 100vh;
         width: 100%;
         overflow: hidden;
@@ -145,7 +145,7 @@ const onSubmit = () => {
         .title {
             font-family: 'ZCOOL KuaiLe', sans-serif;
             font-size: 32px;
-            color: rgba(193, 167, 0, 0.719);
+            color: rgba(59, 53, 13, 0.753);
             margin: 16px auto 11px 0;
             display: flex;
             align-items: center;

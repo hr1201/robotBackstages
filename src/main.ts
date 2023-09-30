@@ -21,6 +21,9 @@ store.use(piniaPlugin({
 
 let app = createApp(App)
 
+// 配置生产环境和开发环境下的环境变量
+// app.config.globalProperties.getEnv =import.meta.env
+
 app.use(store)
 app.use(router)
 app.use(ElementUi)

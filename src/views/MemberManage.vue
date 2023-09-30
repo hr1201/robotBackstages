@@ -17,7 +17,7 @@
     </div>
 
     <!-- 表格 -->
-    <el-table :data="findMember.slice((currentPages-1)*pageSize,currentPages*pageSize)" style="width: 97%; height: 442px">
+    <el-table :data="findMember.slice((currentPages-1)*pageSize,currentPages*pageSize)" style="width: 97%; height: 445px">
         <el-table-column prop="username" label="姓名" style="width:22%" />
         <el-table-column prop="password" label="密码" style="width:23%" />
         <el-table-column prop="mobphone" label="手机号码" style="width:20%" />

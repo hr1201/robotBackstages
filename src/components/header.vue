@@ -50,7 +50,7 @@ const content = store.user.username
 const logout = () => {
     sessionStorage.removeItem('token');
     localStorage.removeItem('pinia-store')
-    router.push({name:'login'})
+    router.push({ name: 'login' })
 }
 
 // 选择
@@ -99,11 +99,13 @@ const switchSide = () => {
     .el-dropdown-link:focus-visible {
         outline: none;
     }
+
     .el-dropdown-link:focus {
         outline: none;
     }
-    .el-tooltip__trigger { 
-        outline: none; 
+
+    .el-tooltip__trigger {
+        outline: none;
     }
 
     .basic--circle {

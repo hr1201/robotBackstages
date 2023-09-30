@@ -23,7 +23,7 @@ export const editMember = (menber: object) => {
 
 // 获取用户所有动态
 export const getDynamic = () => {
-    return http.get('/api2/tests/getAll')
+    return http.get('/api2/Share/getAll')
 }
 
 // 获取野狼组员的任务
@@ -39,4 +39,14 @@ export const getownPlan = (name: string, date: string) => {
 // 获取用户时长
 export const getDuration = (groupId:number) => {
     return http.get('/api2/WeekSummary/getLastWeekDuration',{ params:{groupId:groupId} })
+}
+
+// 获取该组的周报
+export const getWeekly = (week:string,groupId:number) => {
+    return http.get('/api2/WeekSummary/getUrlByWeekGroupId',{ params:{week:week,groupId:groupId} })
+}
+
+// 获取所有的周期
+export const getWeek = () => {
+    return http.get('/api2/WeekSummary/getWeek')
 }
