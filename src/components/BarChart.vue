@@ -1,9 +1,9 @@
 <template>
-  <div class="echart" id="mychart" :style="myChartStyle"></div>
+  <div class="echart" ref="mychart" :style="myChartStyle"></div>
 </template>
  
 <script lang="ts" setup>
-import { shallowRef, watch, StyleValue } from 'vue';
+import { shallowRef, watch, StyleValue, ref, nextTick } from 'vue';
 import * as echarts from 'echarts/core';
 import {
   TitleComponent,
@@ -32,6 +32,9 @@ const myChartStyle: StyleValue | undefined = { float: "left", width: '100%', hei
 // 获取父组件传过来的yAxis和series数据 
 const props = defineProps(['yAxisData', 'seriesData'])
 
+// 对父组件传过来的数据进行排序
+const propsDesc = ref<{ value: number; label: any; }[]>([]);
+
 const option = shallowRef<EChartsOption>({
   title: {
     text: '一周时长统计'
@@ -54,7 +57,7 @@ const option = shallowRef<EChartsOption>({
   },
   yAxis: {
     type: "category",
-    data: props.yAxisData,//y轴数据
+    data: propsDesc.value.map((item: { label: any; }) => item.label),//y轴数据
     inverse: true,
     animationDuration: 300,
     animationDurationUpdate: 300,
@@ -89,14 +92,13 @@ const option = shallowRef<EChartsOption>({
       top: '10%',
       right: '5',
     }
-
   ],
   series: [
     {
       realtimeSort: false,
       name: "时长",
       type: "bar",
-      data: props.seriesData,//x轴数据 
+      data: propsDesc.value.map((item: { value: any; }) => item.value),//x轴数据 
       label: {
         show: true,
         position: "right",
@@ -118,10 +120,23 @@ const option = shallowRef<EChartsOption>({
   animationEasingUpdate: "linear"
 })
 
-watch(props, () => {
+const mychart = ref<HTMLElement | null>(null)
+
+watch([props, propsDesc.value], async () => {
+  propsDesc.value = props.seriesData
+    .map((value: any, index: string | number) => ({ value, label: props.yAxisData[index] }))
+    .sort((a: { value: number; }, b: { value: number; }) => b.value - a.value);
+
+  await nextTick(); // 等待 DOM 更新
+
+  const labels = propsDesc.value.map((item: { label: any; }) => item.label);
+  const values = propsDesc.value.map((item: { value: any; }) => item.value);
+
+  (option as any).value.yAxis.data = labels;
+  (option as any).value.series[0].data = values;
+
   // await nextTick(); // Add this line to wait for the DOM update   
-  const chartDom = document.getElementById('mychart')!;
-  myChart.value = echarts.init(chartDom);
+  myChart.value = echarts.init(mychart.value);
   pageUpdate();
 }, { deep: true });
 

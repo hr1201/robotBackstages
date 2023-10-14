@@ -1,25 +1,27 @@
 <template>
+    <!-- 周报预览 -->
+    <el-dialog v-model="dialogTableVisible" title="预览周报">
+        <iframe width="100%" height="500px" :src="urlString">
+        </iframe>
+    </el-dialog>
+
     <!-- 缺少选择第几周，还有搜索 -->
-    <el-select v-model="value" value-key="id" @change="changeSelect" style="margin-left: 10px;" class="m-2" placeholder="Select" size="large">
-        <el-option 
-            v-for="item in options" 
-            :key="item.value" 
-            :label="item.label" 
-            :value="item.value"
-            loading="true" />
+    <el-select v-model="values" value-key="id" @change="changeSelect" style="margin-left: 10px;" class="m-2"
+        placeholder="Select" size="large">
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" loading="true" />
     </el-select>
-    
-    <span style="color: rgb(156 163 175);">&nbsp&nbsp --本页面可使用浏览器自带的Ctrl+f 进行搜索--</span>
-    
+
+    <span style="color: rgb(156 163 175);">&nbsp&nbsp --点击下拉框选择，本页面可使用浏览器自带的Ctrl+f 进行搜索--</span>
+
     <div class="card-block">
         <div v-for="week in weeklies" class="card" :key="week.id">
-            <span class="title">🍪 {{ week.username }}</span>
+            <span class="title">🍪 {{ week.userName }}</span>
             <p class="description"><strong>总结：</strong>{{ week.summary }}</p>
             <div class="actions">
                 <p class="pref">
                     {{ week.time }}
                 </p>
-                <docsButton :wordUrl="week.wordUrl" />
+                <docsButton :wordUrl="week.wordUrl" @DocsPreview="urlClick" />
             </div>
         </div>
     </div>
@@ -42,20 +44,40 @@ type weekType = {
 type weeklyType = {
     id: number,
     summary: string,
-    usersId: number,
-    username: string,
+    userId: number,
+    userName: string,
     wordUrl: string,
     week?: string,
     time: string
 }
 
-const value = ref('第1周')
+const values = ref('第1周')
 
 let options = ref<weekType[]>([])
 
+const groupId = store.user.groupId;
+
+// 组员的指定周期的周报 
+const changeSelect = () => {
+    getWeekly(values.value, groupId).then((response) => {
+        weeklies.value = response.data.data
+    }).catch((error) => {
+        ElMessage.error(error)
+    })
+}
+
+// 选择框中的周期数
 getWeek().then((response) => {
-    response.data.forEach((value: any) => {
-        if (options.value) {
+    response.data.data.forEach((value: any) => {
+        if (options.value && response.data.data.length == 1) {
+            values.value = value
+            options.value.push({
+                value: value,
+                label: value
+            })
+            changeSelect()
+        }
+        else if (options.value) {
             options.value.push({
                 value: value,
                 label: value
@@ -68,17 +90,17 @@ getWeek().then((response) => {
 
 let weeklies = ref<weeklyType[]>([])
 
-const groupId = store.user.groupId;
+changeSelect()
 
-const changeSelect=()=>{
-    getWeekly(value.value, groupId).then((response) => {
-        weeklies.value = response.data
-    }).catch((error) => {
-        ElMessage.error(error)
-    })
+// 用于dialog的开启和关闭
+const dialogTableVisible = ref(false)
+let urlString: string
+
+const urlClick = (val: any) => {
+    dialogTableVisible.value = true
+    urlString = val.urlPre
 }
 
-changeSelect()
 </script>
 <style lang="less" scoped>
 // 卡片位置
@@ -100,7 +122,7 @@ changeSelect()
     border: solid #ff822d 1px;
     transition: transform 0.2s ease;
     margin: 12px;
-
+    margin-right: 5px;
     // &:last-child {
     //     margin-right: 0;
     // }

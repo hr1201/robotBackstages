@@ -21,10 +21,12 @@ export const useStore = defineStore(Names.attribute, {
         setCollapse() {
             this.Collapse = !this.Collapse
         },
-        setUser(username:string,userImage:string,groupId:number) {
+        setUser(username:string,groupId:number) {
             this.user.username = username,
-            this.user.userImage = userImage,
             this.user.groupId = groupId
+        },
+        setuserImage(userImage:string) {
+            this.user.userImage = userImage
         },
     }
 })

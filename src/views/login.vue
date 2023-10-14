@@ -24,7 +24,7 @@
 <script setup lang='ts'>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router';
-import { login } from '../http/index';
+import { login,getGroupInfo } from '../http/index';
 import { useStore } from '../store/index'
 import { FormItemRule, FormInstance, ElMessage } from 'element-plus'
 // import { AxiosResponse } from 'axios';
@@ -36,7 +36,7 @@ import { FormItemRule, FormInstance, ElMessage } from 'element-plus'
 
 const router = useRouter()
 // 调用仓库
-const user=useStore()
+const store=useStore()
 
 type From = {
     user: string,
@@ -78,10 +78,12 @@ const onSubmit = () => {
         // console.log(validate)
         if (validate) {
             login(formInline.user, formInline.password).then((response) => {
-                if (response.data.errorCodeEnum == 'OK'&&response.data.data) {
+                if (response.data.code == '200'&&response.data.data) {
                     ElMessage.success(`欢迎${formInline.user}管理员！！！`)
-                    console.log(response.data)
-                    user.setUser(formInline.user,'image',response.data.data?.groupId)
+                    store.setUser(formInline.user,response.data.data?.groupId)
+                    getGroupInfo(response.data.data?.groupId).then((response)=>{
+                        store.setuserImage(response.data.data.headUrl)
+                    })
                     router.push('/homePage')
                     sessionStorage.setItem('token', response.data.data?.token)
                 } else {
@@ -93,6 +95,7 @@ const onSubmit = () => {
             ElMessage.error('请输入完整！！！')
         }
     })
+    
 }
 </script>
 <style lang="less" scoped>

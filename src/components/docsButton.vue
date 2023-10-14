@@ -1,13 +1,15 @@
 <template>
     <button class="download-button">
-        <div class="docs"><svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none"
-                stroke-width="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line y2="13" x2="8" y1="13" x1="16"></line>
-                <line y2="17" x2="8" y1="17" x1="16"></line>
-                <polyline points="10 9 9 9 8 9"></polyline>
-            </svg> Docs</div>
+        <a @click="DocsPreview(props.wordUrl)" class="preview" title="预览">
+            <div class="docs"><svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none"
+                    stroke-width="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line y2="13" x2="8" y1="13" x1="16"></line>
+                    <line y2="17" x2="8" y1="17" x1="16"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg> Docs</div>
+        </a>
 
         <a :href="props.wordUrl">
             <div class="download">
@@ -26,6 +28,30 @@
 // import { ref } from 'vue'
 const props = defineProps(['wordUrl'])
 // console.log(props.wordUrl)
+
+// 子组件传递urlString
+const emit = defineEmits(['DocsPreview'])
+
+// 点击Docs进行预览
+const DocsPreview = (url: string | URL | undefined) => {
+    let onlineViewType = ['doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx']
+    let urlString = typeof url === 'string' ? url : url?.toString() || ''; // 将 URL 转换为 string 类型
+    let fileTypeName = urlString.substring(urlString.lastIndexOf('.') + 1, urlString.length).split('?')[0]
+    let isWord = onlineViewType.find((type) => type === fileTypeName)
+    if (isWord) {
+        // http://view.officeapps.live.com/op/view.aspx?src= (需要翻墙)
+        // http://www.xdocin.com/xdoc?_func=to&_format=html&_cache=true&_xdoc= (大小限制为4M)
+        // https://view.xdocin.com/view?src=
+        urlString = 'http://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent(urlString) + ""
+    }
+    // window.open(urlString, '_blank')
+    //传递给父组件
+    let urlstring={
+        urlPre:urlString
+    }
+    emit('DocsPreview',urlstring)
+}
+
 </script>
 <style scoped>
 /* 文档按钮 */
@@ -37,6 +63,10 @@ const props = defineProps(['wordUrl'])
     font-weight: 600;
     border-radius: 4px;
     z-index: 1;
+}
+
+.download-button .preview {
+    cursor: zoom-in;
 }
 
 .download-button .docs {

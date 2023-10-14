@@ -18,15 +18,15 @@
 
     <!-- 表格 -->
     <el-table :data="findMember.slice((currentPages-1)*pageSize,currentPages*pageSize)" style="width: 97%; height: 445px">
-        <el-table-column prop="username" label="姓名" style="width:22%" />
+        <el-table-column prop="userName" label="姓名" style="width:22%" />
         <el-table-column prop="password" label="密码" style="width:23%" />
-        <el-table-column prop="mobphone" label="手机号码" style="width:20%" />
+        <el-table-column prop="phoneNumber" label="手机号码" style="width:20%" />
         <el-table-column prop="duration" align="center" label="上周时长" style="width:14%" />
 
         <el-table-column align="center" fixed="right" label="操作" style="width:18%">
             <template #default="scope">
-                <el-button link type="primary" size="large" @click="handleEdit(scope.row.users_id)">修改</el-button>
-                <el-button link type="primary" size="large" @click="handleDelete(scope.row.users_id)">删除</el-button>
+                <el-button link type="primary" size="large" @click="handleEdit(scope.row.id)">修改</el-button>
+                <!-- <el-button link type="primary" size="large" @click="handleDelete(scope.row.id)">删除</el-button> -->
             </template>
         </el-table-column>
     </el-table>
@@ -56,13 +56,13 @@
         <div class="drawer__content">
             <el-form :model="form">
                 <el-form-item label="姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.username" autocomplete="off" />
+                    <el-input v-model="form.userName" autocomplete="off" disabled/>
                 </el-form-item>
                 <el-form-item label="密码" :label-width="formLabelWidth">
                     <el-input v-model="form.password" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="form.mobphone" autocomplete="off" />
+                    <el-input v-model="form.phoneNumber" autocomplete="off" />
                 </el-form-item>
             </el-form>
             <div align="center" class="drawer__footer">
@@ -77,18 +77,18 @@
 
 <script setup lang='ts'>
 import { reactive,ref,computed } from 'vue'
-import { getMember,deleteMember,editMember } from '../http/index'
-import { ElDrawer,ElMessage, MessageParamsWithType,ElMessageBox } from 'element-plus'
+import { getMember,editMember } from '../http/index'
+import { ElDrawer,ElMessage, MessageParamsWithType } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import { useStore } from '../store/index'
 
 type tableDataType = {
-    username: string,
+    userName: string,
     password: string,
-    mobphone: number,
+    phoneNumber: number,
     duration: number,
     location?: string | undefined,
-    users_id?: number | undefined,
+    id?: number | undefined,
     groupid?: number | undefined,
 }
 
@@ -115,15 +115,15 @@ const select = ref('')//选择框
 const findMember=computed(()=>{
     if(select.value=="2"){
         return tableData.value.filter((value)=>{
-            return value.duration>=25&&value.username.includes(input3.value)
+            return value.duration>=25&&value.userName.includes(input3.value)
         })
     }else if(select.value=="3"){
         return tableData.value.filter((value)=>{
-            return value.duration<25&&value.username.includes(input3.value)
+            return value.duration<25&&value.userName.includes(input3.value)
        })
     }else{
         return tableData.value.filter((value)=>{
-            return value.username.includes(input3.value)
+            return value.userName.includes(input3.value)
         })
     }
 })
@@ -137,9 +137,9 @@ const dialog = ref(false)
 const loading = ref(false)
 
 let form = reactive<tableDataType>({
-    username: '',
+    userName: '',
     password: '',
-    mobphone: 0,
+    phoneNumber: 0,
     duration:0
 })
 
@@ -167,39 +167,38 @@ const cancelForm = () => {
 const handleEdit = (id:number) => {
     table.value = true
     tableData.value.forEach((value)=>{
-        console.log(value.users_id)
-        if(value.users_id==id){
+        if(value.id==id){
             Object.assign(form,value)
         }
     })
 }
 
 // 删除按钮
-const handleDelete=(id:number)=>{
-    ElMessageBox.confirm(
-    '确定要删除这个组员吗？',
-    '警告',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  )
-    .then(() => {
-        deleteMember(id).then(()=>{
-            getMembers()
-            ElMessage.success("人生有梦，各自精彩！")
-        }).catch((error)=>{
-            ElMessage.error(error)
-        })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '取消删除',
-      })
-    })
-}
+// const handleDelete=(id:number)=>{
+//     ElMessageBox.confirm(
+//     '确定要删除这个组员吗？',
+//     '警告',
+//     {
+//       confirmButtonText: '确定',
+//       cancelButtonText: '取消',
+//       type: 'warning',
+//     }
+//   )
+//     .then(() => {
+//         deleteMember(id).then(()=>{
+//             getMembers()
+//             ElMessage.success("人生有梦，各自精彩！")
+//         }).catch((error)=>{
+//             ElMessage.error(error)
+//         })
+//     })
+//     .catch(() => {
+//       ElMessage({
+//         type: 'info',
+//         message: '取消删除',
+//       })
+//     })
+// }
 
 // 分页
 const currentPages = ref(1)// 当前页数
@@ -207,7 +206,6 @@ const pageSize = ref(10)// 每页显示条目个数
 const background=ref(false)
 // page-size 改变时触发
 const handleSizeChange = (size: number) => {
-    console.log(size)
     pageSize.value = size;
 }
 // current-page 改变时触发

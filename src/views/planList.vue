@@ -25,9 +25,9 @@
                     </div>
                     <div v-for="list in finished" :key="list.id" class="page">
                         <div class="margin">
-                            <p>{{ list.username ? list.username + '：' : '' }}</p>
+                            <p>{{ list.userName ? list.userName + '：' : '' }}</p>
                         </div>
-                        <p style="line-height: 27px;">{{ list.taskSuccess }}</p>
+                        <p style="line-height: 27px;">{{ list.task }}</p>
                         <p class="time">{{ list.date ? '--' + list.date : '' }}</p>
                     </div>
                 </el-col>
@@ -40,9 +40,9 @@
                     </div>
                     <div v-for="list in unfinished" :key="list.id" class="page">
                         <div class="margin">
-                            <p>{{ list.username ? list.username + '：' : '' }}</p>
+                            <p>{{ list.userName ? list.userName + '：' : '' }}</p>
                         </div>
-                        <p style="line-height: 27px;">{{ list.taskSuccess }}</p>
+                        <p style="line-height: 27px;">{{ list.task }}</p>
                         <p class="time">{{ list.date ? '--' + list.date : '' }}</p>
                     </div>
                 </el-col>
@@ -76,23 +76,21 @@ const user = useStore()
 
 type plan = {
     id: number,
-    username: string,
-    taskSuccess: string,
+    task: string,
     date: string,
-    taskid?: number,
-    achieve?: string,
-    groupid?: number,
-    location?: string,
-    my_color?: string,
-    users_id?: number
+    userName: string,
+    userId?: number
+    myColor?: string,
+    status?: string,
+    week?:string
 }
 
 // 已完成任务
 const finished = ref<plan[]>(
     [
         {
-            username: '',
-            taskSuccess: '暂无',
+            userName: '',
+            task: '暂无',
             id: 0,
             date: ""
         }
@@ -103,8 +101,8 @@ const finished = ref<plan[]>(
 const unfinished = ref<plan[]>(
     [
         {
-            username: '',
-            taskSuccess: '暂无',
+            userName: '',
+            task: '暂无',
             id: 0,
             date: ""
         }
@@ -125,16 +123,16 @@ function empty(): void {
 function isEmpty(): void {
     if (finished.value.length === 0) {
         finished.value.push({
-            username: '',
-            taskSuccess: '暂无',
+            userName: '',
+            task: '暂无',
             id: 0,
             date: ""
         });
     }
     if (unfinished.value.length === 0) {
         unfinished.value.push({
-            username: '',
-            taskSuccess: '暂无',
+            userName: '',
+            task: '暂无',
             id: 0,
             date: ""
         });
@@ -149,14 +147,13 @@ watchEffect(() => {
     getPlan(dateValue.value, user.user.groupId.toString()).then((response) => {
         // 选择其他日期，重新调用此回调函数时，置为空
         empty()
-
-        response.data.forEach((value: plan) => {
-            if (value.achieve == '已完成') {
+        response.data.data.forEach((value: plan) => {
+            if (value.status == '已完成') {
                 finished.value.push(value)
-            } else if (value.achieve == '未完成') {
+            } else if (value.status == '未完成') {
                 unfinished.value.push(value)
             } else {
-                unwriteName.value += value.username + ','
+                unwriteName.value += value.userName+ ','
             }
         })
         // 判断是否为空
@@ -164,7 +161,6 @@ watchEffect(() => {
     }).catch((error) => {
         ElMessage.error(error)
     })
-
 })
 
 // 选择框
@@ -172,17 +168,16 @@ const input1 = ref<string>('')
 
 let selectChange: any = (input: string) => {
     if (input1.value && input1.value != '') {
-        getownPlan(input, dateValue.value).then((response) => {
+        getownPlan(input).then((response) => {
             // 选择其他日期，重新调用此回调函数时，置为空
             empty()
-
-            response.data.forEach((value: plan) => {
-                if (value.achieve == '已完成') {
+            response.data.data.forEach((value: plan) => {
+                if (value.status == '已完成') {
                     finished.value.push(value)
-                } else if (value.achieve == '未完成') {
+                } else if (value.status == '未完成') {
                     unfinished.value.push(value)
                 } else {
-                    unwriteName.value += value.username + ','
+                    unwriteName.value += value.userName+`(${value.date})` + ','
                 }
             })
 

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const http = axios.create({
   //通用请求的地址前缀(例如，http://www.baidu.com/)
-  baseURL: '',
+  baseURL: 'api',
   // 超时时间==
   timeout: 8000,
 });

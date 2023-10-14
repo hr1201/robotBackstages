@@ -19,7 +19,7 @@
 <script setup lang='ts'>
 import { ref, computed } from 'vue';
 import { useStore } from '../store/index'
-import { getDuration } from '../http/index'
+import { getGroupAllUserDuration } from '../http/index'
 import { ElMessage } from 'element-plus'
 import barchat from '../components/BarChart.vue';
 
@@ -47,16 +47,16 @@ let seriesData = ref<number[]>([]);
 // 获取数据
 async function getNum(): Promise<void> {
     try {
-        const response = await getDuration(groupId);
-        num.value = response.data.length;
-        time.value = response.data.reduce((prev: number, cur: { duration: number; }) => {
+        const response = await getGroupAllUserDuration(groupId);
+        num.value = response.data.data.length;
+        time.value = response.data.data.reduce((prev: number, cur: { duration: number; }) => {
             return (prev + (cur.duration || 0) / num.value);
         }, 0);
-        response.data.forEach((value: { username: string; compliance: string; duration: number; }) => {
-            if (value.duration > 25 && value.compliance == '达标') {
+        response.data.data.forEach((value: { userName: string; compliance: string; duration: number; }) => {
+            if (value.duration > 25) {
                 standard.value++;
             }
-            yAxisData.value?.push(value.username)
+            yAxisData.value?.push(value.userName)
             seriesData.value?.push(value.duration)
         });
     } catch (error) {
