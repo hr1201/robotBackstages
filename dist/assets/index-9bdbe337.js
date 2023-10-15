@@ -1,0 +1,1 @@
+import{aj as r}from"./index-fae02cfc.js";var s=(e=>(e.attribute="store",e))(s||{});const a=r(s.attribute,{state:()=>({Collapse:!0,user:{username:"",userImage:"",groupId:0}}),getters:{},actions:{setCollapse(){this.Collapse=!this.Collapse},setUser(e,t){this.user.username=e,this.user.groupId=t},setuserImage(e){this.user.userImage=e}}});export{a as u};

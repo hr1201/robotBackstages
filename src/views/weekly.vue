@@ -55,6 +55,8 @@ const values = ref('第1周')
 
 let options = ref<weekType[]>([])
 
+let weeklies = ref<weeklyType[]>([])
+
 const groupId = store.user.groupId;
 
 // 组员的指定周期的周报 
@@ -88,8 +90,6 @@ getWeek().then((response) => {
     ElMessage.error(error)
 })
 
-let weeklies = ref<weeklyType[]>([])
-
 changeSelect()
 
 // 用于dialog的开启和关闭
@@ -105,27 +105,20 @@ const urlClick = (val: any) => {
 <style lang="less" scoped>
 // 卡片位置
 .card-block {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns:repeat(auto-fit,minmax(265px,1fr));
+    gap:20px;
+    margin: 10px 0 0 10px;
 }
 
 // 卡片框
 .card {
-    width: 23%;
-    min-width: 260px;
     padding: 1rem;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 20px 20px 30px rgba(0, 0, 0, .05);
     border: solid #ff822d 1px;
     transition: transform 0.2s ease;
-    margin: 12px;
-    margin-right: 5px;
-    // &:last-child {
-    //     margin-right: 0;
-    // }
 
     .title {
         font-weight: 600;
