@@ -8,16 +8,18 @@
                     <el-option label="所有组员" value="1" />
                     <el-option label="上周时长达标" value="2" />
                     <el-option label="上周时长未达标" value="3" />
+                    <el-option label="正式队员" value="4" />
                 </el-select>
             </template>
             <template #append>
-                <el-button :icon="Search" @click.native="findMember"/>
+                <el-button :icon="Search" @click.native="findMember" />
             </template>
         </el-input>
     </div>
 
     <!-- 表格 -->
-    <el-table :data="findMember.slice((currentPages-1)*pageSize,currentPages*pageSize)" style="width: 97%; height: 445px">
+    <el-table :data="findMember.slice((currentPages - 1) * pageSize, currentPages * pageSize)"
+        style="width: 97%; height: 445px">
         <el-table-column prop="userName" label="姓名" style="width:22%" />
         <el-table-column prop="password" label="密码" style="width:23%" />
         <el-table-column prop="phoneNumber" label="手机号码" style="width:20%" />
@@ -27,36 +29,25 @@
             <template #default="scope">
                 <el-button link type="primary" size="large" @click="handleEdit(scope.row.id)">修改</el-button>
                 <!-- <el-button link type="primary" size="large" @click="handleDelete(scope.row.id)">删除</el-button> -->
+                <el-button link type="success" size="large" :disabled="!scope.row.mailbox"
+                    @click="addTasks(scope.row.id)">添加任务</el-button>
             </template>
         </el-table-column>
     </el-table>
 
     <!-- 分页 -->
     <div class="pagination-block">
-        <el-pagination 
-            :hide-on-single-page="false"
-            v-model:current-page="currentPages"
-            v-model:page-size="pageSize"
-            :background="background"
-            layout="prev, pager, next, jumper"
-            :page-count='Math.ceil(findMember.length/10)'
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            hide-on-single-page:true
-        />
+        <el-pagination :hide-on-single-page="false" v-model:current-page="currentPages" v-model:page-size="pageSize"
+            :background="background" layout="prev, pager, next, jumper" :page-count='Math.ceil(findMember.length / 10)'
+            @size-change="handleSizeChange" @current-change="handleCurrentChange" hide-on-single-page:true />
     </div>
 
     <!-- 修改抽屉 -->
-    <el-drawer
-        v-model="table"
-        title="修改组员信息"
-        direction="rtl"
-        size="30%"
-    >
+    <el-drawer v-model="table" title="修改组员信息" direction="rtl" size="30%">
         <div class="drawer__content">
             <el-form :model="form">
                 <el-form-item label="姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.userName" autocomplete="off" disabled/>
+                    <el-input v-model="form.userName" autocomplete="off" disabled />
                 </el-form-item>
                 <el-form-item label="密码" :label-width="formLabelWidth">
                     <el-input v-model="form.password" autocomplete="off" />
@@ -68,17 +59,37 @@
             <div align="center" class="drawer__footer">
                 <el-button @click="cancelForm">取消</el-button>
                 <el-button type="primary" :loading="loading" @click="onClick">{{
-                loading ? '提交中...' : '提交'
+                    loading ? '提交中...' : '提交'
                 }}</el-button>
             </div>
         </div>
     </el-drawer>
+
+    <!-- 添加任务的弹出框 -->
+    <el-dialog v-model="dialogFormVisible" title="添加任务">
+        <el-form :model="form">
+            <el-form-item label="任务安排" :label-width="dialogWidth">
+                <el-input v-model="dialogForm.leaderTask" autocomplete="off" />
+            </el-form-item>
+            <el-form-item label="任务描述" :label-width="dialogWidth">
+                <el-input v-model="dialogForm.description" autocomplete="off" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取消</el-button>
+                <el-button type="primary" :loading="loading" @click="addTask">{{
+                    loading ? '提交中...' : '提交'
+                }}</el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup lang='ts'>
-import { reactive,ref,computed } from 'vue'
-import { getMember,editMember } from '../http/index'
-import { ElDrawer,ElMessage, MessageParamsWithType } from 'element-plus'
+import { reactive, ref, computed } from 'vue'
+import { getMember, editMember,setTask } from '../http/index'
+import { ElDrawer, ElMessage, MessageParamsWithType } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import { useStore } from '../store/index'
 
@@ -87,6 +98,9 @@ type tableDataType = {
     password: string,
     phoneNumber: number,
     duration: number,
+    leaderTask?:string,
+    description?:string,
+    mailbox?: string,
     location?: string | undefined,
     id?: number | undefined,
     groupid?: number | undefined,
@@ -95,13 +109,13 @@ type tableDataType = {
 let tableData = ref<tableDataType[]>([])
 
 const store = useStore();
-const groupId:number = store.user.groupId;
+const groupId: number = store.user.groupId;
 
 // 用于高亮某些行的属性highlight-current-row，当有用户时长不足35h时，背景为红
 // 以下为接口传过来的数据
-function getMembers(){
+function getMembers() {
     getMember(groupId).then((response: { data: any; }) => {
-        tableData.value=response.data.data
+        tableData.value = response.data.data
     }).catch((error: MessageParamsWithType) => {
         ElMessage.error(error)
     })
@@ -112,17 +126,21 @@ getMembers()
 const input3 = ref('')//输入框
 const select = ref('')//选择框
 
-const findMember=computed(()=>{
-    if(select.value=="2"){
-        return tableData.value.filter((value)=>{
-            return value.duration>=25&&value.userName.includes(input3.value)
+const findMember = computed(() => {
+    if (select.value == "2") {
+        return tableData.value.filter((value) => {
+            return value.duration >= 25 && value.userName.includes(input3.value)
         })
-    }else if(select.value=="3"){
-        return tableData.value.filter((value)=>{
-            return value.duration<25&&value.userName.includes(input3.value)
-       })
-    }else{
-        return tableData.value.filter((value)=>{
+    } else if (select.value == "3") {
+        return tableData.value.filter((value) => {
+            return value.duration < 25 && value.userName.includes(input3.value)
+        })
+    } else if (select.value == "4") {
+        return tableData.value.filter((value) => {
+            return value.mailbox && value.userName.includes(input3.value)
+        })
+    } else {
+        return tableData.value.filter((value) => {
             return value.userName.includes(input3.value)
         })
     }
@@ -140,35 +158,35 @@ let form = reactive<tableDataType>({
     userName: '',
     password: '',
     phoneNumber: 0,
-    duration:0
+    duration: 0
 })
 
 // 修改抽屉的提交按钮
 const onClick = () => {
-    editMember(form).then(()=>{
+    editMember(form).then(() => {
         ElMessage.success("修改成功")
         getMembers()
         table.value = false
-    }).catch((error)=>{
+    }).catch((error) => {
         ElMessage.error(error)
     })
 }
 
 // 修改抽屉的取消按钮
 const cancelForm = () => {
-  loading.value = false
-  dialog.value = false
-  table.value=false
-  clearTimeout(timer)
-  
+    loading.value = false
+    dialog.value = false
+    table.value = false
+    clearTimeout(timer)
+
 }
 
 // 修改按钮
-const handleEdit = (id:number) => {
+const handleEdit = (id: number) => {
     table.value = true
-    tableData.value.forEach((value)=>{
-        if(value.id==id){
-            Object.assign(form,value)
+    tableData.value.forEach((value) => {
+        if (value.id == id) {
+            Object.assign(form, value)
         }
     })
 }
@@ -200,10 +218,48 @@ const handleEdit = (id:number) => {
 //     })
 // }
 
+// 添加任务按钮
+const dialogFormVisible = ref(false)
+const dialogWidth = '100px'
+
+type dialogFormType={
+    id:number,
+    leaderTask:string | undefined,
+    description:string | undefined
+}
+
+const dialogForm = reactive<dialogFormType>({
+    id:0,
+    leaderTask: '',
+    description: '',
+})
+
+const addTasks=(id:number)=>{
+    dialogFormVisible.value=true
+    tableData.value.forEach((value) => {
+        if (value.id == id) {
+            dialogForm.id=value.id
+            dialogForm.leaderTask=value.leaderTask
+            dialogForm.description=value.description
+        }
+    })
+}
+
+const addTask=()=>{
+    setTask(dialogForm).then(()=>{
+        // console.log(dialogForm)
+        ElMessage.success("修改成功")
+        dialogFormVisible.value=false
+        getMembers()
+    }).catch((error)=>{
+        ElMessage.error(error)
+    })
+}
+
 // 分页
 const currentPages = ref(1)// 当前页数
 const pageSize = ref(10)// 每页显示条目个数
-const background=ref(false)
+const background = ref(false)
 // page-size 改变时触发
 const handleSizeChange = (size: number) => {
     pageSize.value = size;

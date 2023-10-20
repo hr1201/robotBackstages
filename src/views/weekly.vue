@@ -84,13 +84,15 @@ getWeek().then((response) => {
                 value: value,
                 label: value
             })
+            values.value = options.value[0].value
+            changeSelect()
         }
     })
 }).catch((error) => {
     ElMessage.error(error)
 })
 
-changeSelect()
+// changeSelect()
 
 // 用于dialog的开启和关闭
 const dialogTableVisible = ref(false)
@@ -106,6 +108,8 @@ const urlClick = (val: any) => {
 // 卡片位置
 .card-block {
     display: grid;
+    // 当卡片只有一个时，会撑的很长，可以通过判断卡片数量，然后使用动态的添加css
+    // 以此来适配只有一个时的情况
     grid-template-columns:repeat(auto-fit,minmax(265px,1fr));
     gap:20px;
     margin: 10px 0 0 10px;

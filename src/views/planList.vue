@@ -6,10 +6,10 @@
                 <DatePicker placeholder="请选择日期" mode="date" :max-date="new Date()" format="yyyy-MM-dd"
                     v-model="dateValue" />
             </div>
-            <div class="select">
+            <el-form class="select" @submit.prevent @keyup.enter.native="selectChange(input1)">
                 <el-input v-model="input1" class="w-50 m-2" size="large" placeholder="请输入组员姓名" />
                 <el-button :icon="Search" @click="selectChange(input1)" size="large" />
-            </div>
+            </el-form>
         </div>
 
         <el-divider content-position="left">以下为组员任务</el-divider>
@@ -66,7 +66,6 @@
 import { ref, watchEffect } from 'vue'
 import { getPlan, getownPlan } from '../http/index'
 import { useStore } from '../store/index'
-import { format } from 'date-fns'
 import { ElMessage } from 'element-plus'
 import { Sunny, Lightning, WarnTriangleFilled, Search } from '@element-plus/icons-vue'
 import { DatePicker } from 'vue-amazing-ui'
@@ -82,7 +81,7 @@ type plan = {
     userId?: number
     myColor?: string,
     status?: string,
-    week?:string
+    week?: string
 }
 
 // 已完成任务
@@ -140,9 +139,9 @@ function isEmpty(): void {
 }
 
 // 日期
-const dateValue = ref(format(new Date(), 'yyyy-MM-dd'))
+const dateValue = ref(new Date().toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }));
 
-watchEffect(() => {
+function getPlans() {
     // 获取组别任务
     getPlan(dateValue.value, user.user.groupId.toString()).then((response) => {
         // 选择其他日期，重新调用此回调函数时，置为空
@@ -153,7 +152,7 @@ watchEffect(() => {
             } else if (value.status == '未完成') {
                 unfinished.value.push(value)
             } else {
-                unwriteName.value += value.userName+ ','
+                unwriteName.value += value.userName + ','
             }
         })
         // 判断是否为空
@@ -161,13 +160,17 @@ watchEffect(() => {
     }).catch((error) => {
         ElMessage.error(error)
     })
+}
+
+watchEffect(() => {
+    getPlans()
 })
 
 // 选择框
 const input1 = ref<string>('')
 
 let selectChange: any = (input: string) => {
-    if (input1.value && input1.value != '') {
+    if (input1.value) {
         getownPlan(input).then((response) => {
             // 选择其他日期，重新调用此回调函数时，置为空
             empty()
@@ -177,7 +180,7 @@ let selectChange: any = (input: string) => {
                 } else if (value.status == '未完成') {
                     unfinished.value.push(value)
                 } else {
-                    unwriteName.value += value.userName+`(${value.date})` + ','
+                    unwriteName.value += value.userName + `(${value.date})` + ','
                 }
             })
 
@@ -186,6 +189,8 @@ let selectChange: any = (input: string) => {
         }).catch((error) => {
             ElMessage.error(error)
         })
+    } else if (input1.value == '') {
+        getPlans()
     }
 }
 
@@ -232,6 +237,7 @@ let selectChange: any = (input: string) => {
         }
 
         .grid-mixin(@color) {
+
             // border: solid 2px @color;
             .el-icon {
                 margin-left: 5px;

@@ -5,7 +5,7 @@
             <!-- <img class="logo-img" src="../assets/images/wolf.gif" alt=""> -->
         </div>
         <el-card class="box-card">
-            <el-form ref="form" :rules="rules" :model="formInline" class="demo-form-inline">
+            <el-form ref="form" :rules="rules" :model="formInline" class="demo-form-inline"  @keyup.enter.native="onSubmit">
                 <div class="title">🥕萝卜项管</div>
                 <el-form-item prop="user">
                     <el-input v-model="formInline.user" placeholder="请输入账号" clearable />

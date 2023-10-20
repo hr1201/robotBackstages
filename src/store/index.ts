@@ -9,7 +9,7 @@ export const useStore = defineStore(Names.attribute, {
                 username:'',
                 userImage:'',
                 groupId:0
-            }
+            },
         }
     },
     // computed 修饰值
