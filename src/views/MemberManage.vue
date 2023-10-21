@@ -20,12 +20,13 @@
     <!-- 表格 -->
     <el-table :data="findMember.slice((currentPages - 1) * pageSize, currentPages * pageSize)"
         style="width: 97%; height: 445px">
-        <el-table-column prop="userName" label="姓名" style="width:22%" />
-        <el-table-column prop="password" label="密码" style="width:23%" />
-        <el-table-column prop="phoneNumber" label="手机号码" style="width:20%" />
-        <el-table-column prop="duration" align="center" label="上周时长" style="width:14%" />
+        <el-table-column prop="userName" label="姓名" style="width:20%" />
+        <el-table-column prop="password" label="密码" style="width:21%" />
+        <el-table-column prop="phoneNumber" label="手机号码" style="width:18%" />
+        <el-table-column prop="duration" align="center" label="上周时长" style="width:12%" />
+        <el-table-column prop="leaderTaskWeek" align="center" label="任务的周期" style="width:13%" />
 
-        <el-table-column align="center" fixed="right" label="操作" style="width:18%">
+        <el-table-column align="center" fixed="right" label="操作" style="width:16%">
             <template #default="scope">
                 <el-button link type="primary" size="large" @click="handleEdit(scope.row.id)">修改</el-button>
                 <!-- <el-button link type="primary" size="large" @click="handleDelete(scope.row.id)">删除</el-button> -->
@@ -98,6 +99,7 @@ type tableDataType = {
     password: string,
     phoneNumber: number,
     duration: number,
+    leaderTaskWeek:string,
     leaderTask?:string,
     description?:string,
     mailbox?: string,
@@ -158,7 +160,8 @@ let form = reactive<tableDataType>({
     userName: '',
     password: '',
     phoneNumber: 0,
-    duration: 0
+    duration: 0,
+    leaderTaskWeek:'第0周'
 })
 
 // 修改抽屉的提交按钮

@@ -7,7 +7,7 @@ export const login = (username: string, password: string) => {
 
 // 组员管理页面获取组员
 export const getMember = (groupId: number) => {
-    return http.get('/logins', { params: { groupId: groupId } })
+    return http.get('/logins/getAllTeamMember', { params: { groupId: groupId } })
 }
 
 // 组员管理页面删除
