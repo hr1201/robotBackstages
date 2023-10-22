@@ -53,6 +53,15 @@ const routes: Array<RouteRecordRaw> = [
                 },
             }, 
             {
+                path: '/menberTask',
+                name: 'menberTask',
+                component: () => import('../views/menberTask.vue'),
+                meta: {
+                    title: '组员任务',
+                    requiresAuth: true
+                },
+            },
+            {
                 path: '/dynamicManage',
                 name: 'dynamicManage',
                 component: () => import('../views/dynamicManage.vue'),

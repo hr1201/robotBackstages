@@ -89,7 +89,7 @@
 
 <script setup lang='ts'>
 import { reactive, ref, computed } from 'vue'
-import { getMember, editMember,setTask } from '../http/index'
+import { getMember, editMember, setTask } from '../http/index'
 import { ElDrawer, ElMessage, MessageParamsWithType } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import { useStore } from '../store/index'
@@ -99,9 +99,9 @@ type tableDataType = {
     password: string,
     phoneNumber: number,
     duration: number,
-    leaderTaskWeek:string,
-    leaderTask?:string,
-    description?:string,
+    leaderTaskWeek: string,
+    leaderTask?: string,
+    description?: string,
     mailbox?: string,
     location?: string | undefined,
     id?: number | undefined,
@@ -161,7 +161,7 @@ let form = reactive<tableDataType>({
     password: '',
     phoneNumber: 0,
     duration: 0,
-    leaderTaskWeek:'第0周'
+    leaderTaskWeek: '第0周'
 })
 
 // 修改抽屉的提交按钮
@@ -225,36 +225,36 @@ const handleEdit = (id: number) => {
 const dialogFormVisible = ref(false)
 const dialogWidth = '100px'
 
-type dialogFormType={
-    id:number,
-    leaderTask:string | undefined,
-    description:string | undefined
+type dialogFormType = {
+    id: number,
+    leaderTask: string | undefined,
+    description: string | undefined
 }
 
 const dialogForm = reactive<dialogFormType>({
-    id:0,
+    id: 0,
     leaderTask: '',
     description: '',
 })
 
-const addTasks=(id:number)=>{
-    dialogFormVisible.value=true
+const addTasks = (id: number) => {
+    dialogFormVisible.value = true
     tableData.value.forEach((value) => {
         if (value.id == id) {
-            dialogForm.id=value.id
-            dialogForm.leaderTask=value.leaderTask
-            dialogForm.description=value.description
+            dialogForm.id = value.id
+            dialogForm.leaderTask = value.leaderTask
+            dialogForm.description = value.description
         }
     })
 }
 
-const addTask=()=>{
-    setTask(dialogForm).then(()=>{
+const addTask = () => {
+    setTask(dialogForm).then(() => {
         // console.log(dialogForm)
         ElMessage.success("修改成功")
-        dialogFormVisible.value=false
+        dialogFormVisible.value = false
         getMembers()
-    }).catch((error)=>{
+    }).catch((error) => {
         ElMessage.error(error)
     })
 }

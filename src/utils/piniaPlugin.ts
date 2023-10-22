@@ -2,7 +2,7 @@
 import { toRaw } from 'vue';
 import { PiniaPluginContext } from 'pinia'
 
-const _piniakey = 'rarrot';
+const _piniakey = 'pinia';
 
 type Options = {
   key?:string

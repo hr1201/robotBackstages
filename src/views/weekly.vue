@@ -3,6 +3,7 @@
     <el-dialog v-model="dialogTableVisible" title="预览周报">
         <iframe width="100%" height="500px" :src="urlString">
         </iframe>
+        <VueOfficeDocx :src="officeString" style="height: 100%; margin: 0; padding: 0" />
     </el-dialog>
 
     <!-- 缺少选择第几周，还有搜索 -->
@@ -21,7 +22,7 @@
                 <p class="pref">
                     {{ week.time }}
                 </p>
-                <docsButton :wordUrl="week.wordUrl" @DocsPreview="urlClick" />
+                <docsButton :wordUrl="week.wordUrl" @DocsPreview="urlClick" @officePreview="officeClick"/>
             </div>
         </div>
     </div>
@@ -33,6 +34,8 @@ import { getWeekly, getWeek } from '../http/index'
 import docsButton from '../components/docsButton.vue'
 import { ElMessage } from 'element-plus'
 import { useStore } from '../store/index'
+import VueOfficeDocx from "@vue-office/docx";
+import "@vue-office/docx/lib/index.css";
 
 const store = useStore();
 
@@ -96,11 +99,17 @@ getWeek().then((response) => {
 
 // 用于dialog的开启和关闭
 const dialogTableVisible = ref(false)
-let urlString: string
 
+let urlString: string
 const urlClick = (val: any) => {
     dialogTableVisible.value = true
     urlString = val.urlPre
+}
+
+let officeString: string
+const officeClick = (val: any) => {
+    dialogTableVisible.value = true
+    officeString = val
 }
 
 </script>
@@ -110,8 +119,8 @@ const urlClick = (val: any) => {
     display: grid;
     // 当卡片只有一个时，会撑的很长，可以通过判断卡片数量，然后使用动态的添加css
     // 以此来适配只有一个时的情况
-    grid-template-columns:repeat(auto-fit,minmax(265px,1fr));
-    gap:20px;
+    grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+    gap: 20px;
     margin: 10px 0 0 10px;
 }
 

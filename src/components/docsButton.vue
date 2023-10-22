@@ -30,7 +30,7 @@ const props = defineProps(['wordUrl'])
 // console.log(props.wordUrl)
 
 // 子组件传递urlString
-const emit = defineEmits(['DocsPreview'])
+const emit = defineEmits(['DocsPreview','officePreview'])
 
 // 点击Docs进行预览
 const DocsPreview = (url: string | URL | undefined) => {
@@ -46,10 +46,11 @@ const DocsPreview = (url: string | URL | undefined) => {
     }
     // window.open(urlString, '_blank')
     //传递给父组件
-    let urlstring={
-        urlPre:urlString
+    let urlstring = {
+        urlPre: urlString
     }
-    emit('DocsPreview',urlstring)
+    emit('DocsPreview', urlstring)
+    emit('officePreview', url)
 }
 
 </script>

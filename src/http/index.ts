@@ -65,3 +65,13 @@ export const getGroupInfo = (groupId: number) => {
 export const setTask = (task:object) => {
     return http.post('/LeaderTask/setFormalTeamMemberLeaderTask', { ...task })
 }
+
+// 保存或修改组别任务
+export const saveGroupTask = (task:object) => {
+    return http.post('/groups/saveGroupTask', { ...task })
+}
+
+// 获取组别本周任务
+export const getGroupWeekTask = (groupId: number) => {
+    return http.get('/groups/getGroupWeekTask', { params: { groupId: groupId } })
+}

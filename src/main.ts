@@ -16,7 +16,7 @@ render(Vnode, document.body)
 const store = createPinia()
 
 store.use(piniaPlugin({
-    key: 'pinia'
+    key: 'rarrot'
 }))
 
 let app = createApp(App)

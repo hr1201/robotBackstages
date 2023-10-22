@@ -19,7 +19,7 @@
 <script setup lang='ts'>
 import { computed } from 'vue';
 import { useRouter,useRoute } from 'vue-router'
-import { HomeFilled, UserFilled, List, Management } from '@element-plus/icons-vue'
+import { HomeFilled, UserFilled, List, Management, Promotion } from '@element-plus/icons-vue'
 import { useStore } from '../store/index'
 
 const router = useRouter()
@@ -68,6 +68,12 @@ const itemList: ItemType[] = [
         url: 'MemberManage',
         urlName: '组员管理',
         iconHtml: UserFilled
+    },
+    {
+        index: '/menberTask',
+        url: 'menberTask',
+        urlName: '安排组员任务',
+        iconHtml: Promotion
     },
     // icon图标：Promotion
     // {

@@ -5,7 +5,7 @@
             <!-- <img class="logo-img" src="../assets/images/wolf.gif" alt=""> -->
         </div>
         <el-card class="box-card">
-            <el-form ref="form" :rules="rules" :model="formInline" class="demo-form-inline"  @keyup.enter.native="onSubmit">
+            <el-form ref="form" :rules="rules" :model="formInline" class="demo-form-inline" @keyup.enter.native="onSubmit">
                 <div class="title">🥕萝卜项管</div>
                 <el-form-item prop="user">
                     <el-input v-model="formInline.user" placeholder="请输入账号" clearable />
@@ -30,7 +30,7 @@ import { FormItemRule, FormInstance, ElMessage } from 'element-plus'
 // import { AxiosResponse } from 'axios';
 
 // 使用validate进行验证
-// 接一个登录接口,将用户输入的formInline.user喝password发送到后端，后端验证完成传回一个token和状态码，将返回内容传入sessionStorage
+// 接一个登录接口,将用户输入的formInline.user和password发送到后端，后端验证完成传回一个token和状态码，将返回内容传入sessionStorage
 // 配置动态路由，后端再传入个菜单，使用router.add添加进路由中；跳转
 // 将token传入请求头，之后的每一次请求都需要验证token，也就是要在请求和响应拦截器中进行相应的判断
 
@@ -84,8 +84,8 @@ const onSubmit = () => {
                     getGroupInfo(response.data.data?.groupId).then((response)=>{
                         store.setuserImage(response.data.data.headUrl)
                     })
-                    router.push('/homePage')
                     sessionStorage.setItem('token', response.data.data?.token)
+                    router.push('/homePage')
                 } else {
                     ElMessage.error('账号或密码输入错误！！！')
                     // console.log(response.data)
@@ -94,8 +94,7 @@ const onSubmit = () => {
         } else {
             ElMessage.error('请输入完整！！！')
         }
-    })
-    
+    })   
 }
 </script>
 <style lang="less" scoped>

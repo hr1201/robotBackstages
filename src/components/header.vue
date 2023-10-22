@@ -45,12 +45,12 @@ let state = reactive({
 })
 
 const { circleUrl } = toRefs(state)
+state.circleUrl=store.getUserImage
 const content = store.user.username
-state.circleUrl=store.user.userImage
 
 const logout = () => {
     sessionStorage.removeItem('token');
-    localStorage.removeItem('pinia-store')
+    store.logout();
     router.push({ name: 'login' })
 }
 
