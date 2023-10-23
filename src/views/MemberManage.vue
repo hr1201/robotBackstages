@@ -31,7 +31,7 @@
                 <el-button link type="primary" size="large" @click="handleEdit(scope.row.id)">修改</el-button>
                 <!-- <el-button link type="primary" size="large" @click="handleDelete(scope.row.id)">删除</el-button> -->
                 <el-button link type="success" size="large" :disabled="!scope.row.mailbox"
-                    @click="addTasks(scope.row.id)">添加任务</el-button>
+                    @click="addTasks(scope.row.id,scope.row.leaderTaskWeek)">添加任务</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -237,10 +237,10 @@ const dialogForm = reactive<dialogFormType>({
     description: '',
 })
 
-const addTasks = (id: number) => {
+const addTasks = (id: number,leaderTaskWeek:string) => {
     dialogFormVisible.value = true
     tableData.value.forEach((value) => {
-        if (value.id == id) {
+        if (value.id == id&&value.leaderTaskWeek==leaderTaskWeek) {
             dialogForm.id = value.id
             dialogForm.leaderTask = value.leaderTask
             dialogForm.description = value.description
