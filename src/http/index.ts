@@ -1,6 +1,6 @@
 import http from "../utils/request";
 
-let urls: string = 'https://api.softwolf.cn'
+let urls: string = ''
 
 // 登录
 export const login = (username: string, password: string) => {
