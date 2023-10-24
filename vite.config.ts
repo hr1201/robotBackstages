@@ -26,7 +26,7 @@ export default defineConfig((({ command, mode }) => {
         // 正则表达式写法,由于需要匹配两个后台，直接写两个env
         '/api': {
           target: env.VITE_BASIC_URL, // 后端服务实际地址
-          changeOrigin: true, //开启代理,允许3跨域
+          changeOrigin: true, //开启代理,允许跨域
           rewrite: (path) => path.replace(/^\/api/, '')
         },
       }

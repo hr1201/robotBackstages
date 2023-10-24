@@ -1,8 +1,16 @@
 import axios from "axios";
 
+if (process.env.NODE_ENV === 'development') {
+  //开发环境 do something
+  axios.defaults.baseURL = 'api';
+} else {
+  //生产环境 do something
+  axios.defaults.baseURL = '';
+}
+
 const http = axios.create({
   //通用请求的地址前缀(例如，http://www.baidu.com/)
-  baseURL: '',
+  baseURL: axios.defaults.baseURL,
   // 超时时间==
   timeout: 8000,
 });
