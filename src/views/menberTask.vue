@@ -44,8 +44,12 @@ const tasks=ref<taskType>({
 // 获取之前写的任务安排
 async function getGroupWeekTaskData(groupId: number) {
     const response = await getGroupWeekTask(groupId);
-    tasks.value.task = response.data.data.task;
-    tasks.value.description = response.data.data.description;
+    if(response.data.data.task){
+        tasks.value.task = response.data.data.task;
+    }
+    if(response.data.data.description){
+        tasks.value.description = response.data.data.description;
+    }
 }
 
 getGroupWeekTaskData(groupId)

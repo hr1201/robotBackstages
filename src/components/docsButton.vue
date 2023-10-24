@@ -42,7 +42,7 @@ const DocsPreview = (url: string | URL | undefined) => {
         // http://view.officeapps.live.com/op/view.aspx?src= (需要翻墙)
         // http://www.xdocin.com/xdoc?_func=to&_format=html&_cache=true&_xdoc= (大小限制为4M)
         // https://view.xdocin.com/view?src=
-        urlString = 'http://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent(urlString) + ""
+        urlString = 'https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent(urlString) + ""
     }
     // window.open(urlString, '_blank')
     //传递给父组件
