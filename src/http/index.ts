@@ -1,6 +1,14 @@
 import http from "../utils/request";
 
-let urls: string = ''
+let urls: string
+
+if (process.env.NODE_ENV === 'development') {
+    //开发环境 do something
+    urls = '';
+} else {
+    //生产环境 do something
+    urls = 'https://api.softwolf.cn';
+}
 
 // 登录
 export const login = (username: string, password: string) => {
