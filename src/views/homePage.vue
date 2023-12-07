@@ -12,16 +12,23 @@
                 </div>
             </el-card>
         </el-col>
-        <barchat :yAxisData="yAxisData" :seriesData="seriesData" />
+        <Suspense>
+            <template #default>
+                <barchat :yAxisData="yAxisData" :seriesData="seriesData" />
+            </template>
+        </Suspense>
+
     </el-row>
 </template>
 
 <script setup lang='ts'>
-import { ref, computed } from 'vue';
+import { ref, computed, defineAsyncComponent } from 'vue';
 import { useStore } from '../store/index'
 import { getGroupAllUserDuration } from '../http/index'
 import { ElMessage } from 'element-plus'
-import barchat from '../components/BarChart.vue';
+// import barchat from '../components/BarChart.vue';
+
+const barchat = defineAsyncComponent(() => import('../components/BarChart.vue'))
 
 const store = useStore();
 

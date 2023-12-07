@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'url';
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vitejs.dev/config/
 
@@ -11,7 +12,16 @@ export default defineConfig((({ command, mode }) => {
     define: {
       __APP_ENV__: env.APP_ENV,
     },
-    plugins: [vue()],
+    plugins: [vue(), visualizer({
+      open: true
+    })],
+    build: {
+      chunkSizeWarningLimit: 600,//达到600k打包才会提示
+      cssCodeSplit: false, //css 拆分
+      sourcemap: false, //不生成sourcemap
+      minify: false, //是否禁用最小化混淆，esbuild打包速度最快，terser打包体积最小。
+      assetsInlineLimit: 5000 //小于该值 图片将打包成Base64 
+    },
     resolve: {
       // ./src路径的别名
       alias: {
