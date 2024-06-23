@@ -21,13 +21,13 @@
 </template>
 
 <script setup lang='ts'>
-import { ref, computed, defineAsyncComponent } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from '../store/index'
 import { getGroupAllUserDuration } from '../http/index'
 import { ElMessage } from 'element-plus'
-// import barchat from '../components/BarChart.vue';
+import barchat from '../components/BarChart.vue';
 
-const barchat = defineAsyncComponent(() => import('../components/BarChart.vue'))
+// const barchat = defineAsyncComponent(() => import('../components/BarChart.vue'))
 
 const store = useStore();
 

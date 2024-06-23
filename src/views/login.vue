@@ -14,7 +14,7 @@
                     <el-input show-password type="password" v-model="formInline.password" placeholder="请输入密码" />
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" class="btn-login" style="height: 35px;" @click.native.prevent="onSubmit">登录</el-button>
+                    <el-button type="primary" class="btn-login" style="height: 35px;" @click="onSubmit">登录</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
