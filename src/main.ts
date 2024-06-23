@@ -38,7 +38,7 @@ router.beforeEach((to, _from, next) => {
     // to.meta.requiresAuth ||
     if (whileList.includes(to.path) || sessionStorage.getItem('token')) {
         next()
-    }else {
+    } else {
         ElMessage({
             message: '请登录后再来！！！',
             type: 'error',

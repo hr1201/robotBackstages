@@ -73,19 +73,19 @@ const changeSelect = () => {
 
 // 选择框中的周期数
 getWeek().then((response) => {
-    response.data.data.forEach((value: any) => {
+    response.data.data.forEach((weeknum: any) => {
         if (options.value && response.data.data.length == 1) {
-            values.value = value
+            values.value = weeknum
             options.value.push({
-                value: value,
-                label: value
+                value: weeknum,
+                label: weeknum
             })
             changeSelect()
         }
         else if (options.value) {
             options.value.push({
-                value: value,
-                label: value
+                value: weeknum,
+                label: weeknum
             })
             values.value = options.value[0].value
             changeSelect()

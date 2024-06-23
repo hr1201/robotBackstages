@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'url';
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { visualizer } from 'rollup-plugin-visualizer';
+import { viteMockServe } from "vite-plugin-mock";
 
 // https://vitejs.dev/config/
 
@@ -9,12 +10,18 @@ export default defineConfig((({ command, mode }) => {
   const env: any = loadEnv(mode, process.cwd(), '')
 
   return {
+    base:'./',
     define: {
       __APP_ENV__: env.APP_ENV,
     },
-    plugins: [vue(), visualizer({
-      open: true
-    })],
+    plugins: [
+      vue(), 
+       // 根据环境变量应用viteMockServe插件
+       env.VITE_USE_MOCK === 'true' && viteMockServe({
+        mockPath: "./src/mock", // 指定模拟文件的路径
+        supportTs: true,
+      }),
+    ].filter(Boolean), // 过滤掉虚假值
     build: {
       chunkSizeWarningLimit: 600,//达到600k打包才会提示
       cssCodeSplit: false, //css 拆分

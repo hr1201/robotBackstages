@@ -17,7 +17,6 @@
                 <barchat :yAxisData="yAxisData" :seriesData="seriesData" />
             </template>
         </Suspense>
-
     </el-row>
 </template>
 
