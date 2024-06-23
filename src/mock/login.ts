@@ -1,4 +1,3 @@
-import { MockMethod } from 'vite-plugin-mock'
 import Mock from 'mockjs'
 
 export default [

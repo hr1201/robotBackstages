@@ -1,4 +1,3 @@
-import { MockMethod } from "vite-plugin-mock";
 import Mock from "mockjs";
 
 let taskData: Array<any> = []; // 用于存储生成的任务数据
