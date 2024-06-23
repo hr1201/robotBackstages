@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'development') {
 } else {
     //生产环境 do something
     // urls = 'https://api.softwolf.cn';
-    urls = '';
+    urls = 'api';
 }
 
 // 登录
