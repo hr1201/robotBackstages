@@ -4,7 +4,7 @@ let urls: string
 
 if (process.env.NODE_ENV === 'development') {
     //开发环境 do something
-    urls = 'https://mock.rarrot.ren/mock/66f26b73cf4407324fb66b1c/';
+    urls = 'https://mock.rarrot.ren/mock/66f26b73cf4407324fb66b1c';
     console.log('222222222222',urls)
 } else {
     //生产环境 do something
