@@ -2,12 +2,14 @@ import http from "../utils/request";
 
 let urls: string
 
-if (process.env.NODE_ENV === 'development') {
-    //开发环境 do something
+if (import.meta.env.MODE === 'development') {
+    // 开发环境
     urls = '';
+    console.log('当前环境: development', urls);
 } else {
-    //生产环境 do something
-    urls = process.env.VITE_BASIC_URL||'https://mock.rarrot.ren/mock/66f26b73cf4407324fb66b1c';
+    // 生产环境
+    urls = import.meta.env.VITE_BASIC_URL || 'https://mock.rarrot.ren/mock/66f26b73cf4407324fb66b1c';
+    console.log('当前环境: production', urls);
 }
 
 // 登录
