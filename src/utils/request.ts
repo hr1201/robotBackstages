@@ -13,12 +13,18 @@ const http = axios.create({
   baseURL: axios.defaults.baseURL,
   // 超时时间==
   timeout: 8000,
+  withCredentials: true,
 });
 
 // 添加请求拦截器
 http.interceptors.request.use(function (config) {
   if (sessionStorage.getItem("token")) {
     config.headers['Authorization'] = sessionStorage.getItem("token");
+    if (config.method === 'post') {
+      config.headers['Content-Type'] = 'application/json;charset=UTF-8'
+    }else{
+      config.headers['Content-Type'] = 'application/json';
+    }
   }
   // 在发送请求之前做些什么
   return config;

@@ -16,11 +16,10 @@ if (import.meta.env.MODE === "development") {
 
 // 登录
 export const login = (username: string, password: string) => {
-  return http.post(
-    urls + "/groups/loginManagement",
-    { groupName: username, password: password },
-    { headers: { "Content-Type": "application/json" }, withCredentials: true }
-  );
+  return http.post(urls + "/groups/loginManagement", {
+    groupName: username,
+    password: password,
+  });
 };
 
 // 组员管理页面获取组员
@@ -81,8 +80,6 @@ export const getWeek = () => {
 export const getGroupAllUserDuration = (groupId: number) => {
   return http.get(urls + "/logins/getGroupAllUserDuration", {
     params: { groupId: groupId },
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
   });
 };
 
