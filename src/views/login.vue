@@ -2,7 +2,7 @@
     <div class="login">
         <!-- 背景图或者视频 -->
         <div class="img-container">
-            <!-- <img class="logo-img" src="../assets/images/wolf.gif" alt=""> -->
+            <img class="logo-img" src="../assets/images/wolf.gif" alt="">
         </div>
         <el-card class="box-card">
             <el-form ref="form" :rules="rules" :model="formInline" class="demo-form-inline" @keyup.enter.native="onSubmit">
@@ -135,7 +135,7 @@ const onSubmit = () => {
         background-color: #fff;
         border-radius: 5px;
         box-shadow: 0px 17px 26px 5px #0c0d0e4d;
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(0, 0, 0, 0.8);
         z-index: 500;
 
         .demo-form-inline {
@@ -147,7 +147,7 @@ const onSubmit = () => {
         .title {
             font-family: 'ZCOOL KuaiLe', sans-serif;
             font-size: 32px;
-            color: rgba(59, 53, 13, 0.753);
+            color: rgba(248, 248, 248, 0.753);
             margin: 16px auto 11px 0;
             display: flex;
             align-items: center;

@@ -3,7 +3,7 @@
 </template>
  
 <script lang="ts" setup>
-import { shallowRef, watch, StyleValue, ref, nextTick } from 'vue';
+import { shallowRef, watch, StyleValue, ref, nextTick, onBeforeUnmount } from 'vue';
 import * as echarts from 'echarts/core';
 import {
   TitleComponent,
@@ -135,7 +135,7 @@ watch([props, propsDesc.value], async () => {
   (option as any).value.yAxis.data = labels;
   (option as any).value.series[0].data = values;
 
-  // await nextTick(); // Add this line to wait for the DOM update   
+  // await nextTick(); // 添加这一行来等待 DOM 更新
   myChart.value = echarts.init(mychart.value);
   pageUpdate();
 }, { deep: true });
@@ -149,5 +149,13 @@ function pageUpdate() {
     }
   });
 }
+
+// 在组件销毁前注销 ECharts 实例
+onBeforeUnmount(() => {
+  if (myChart.value) {
+    myChart.value.dispose(); // 注销 ECharts 实例
+    myChart.value = undefined; // 清空引用
+  }
+});
 
 </script>
