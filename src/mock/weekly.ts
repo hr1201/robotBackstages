@@ -36,7 +36,7 @@ export default [
               summary: "@cparagraph", // 随机生成一段文字作为摘要
               userId: "@id",
               userName: "@cname", // 生成一个中文名字
-              wordUrl: "https://mooc2-ans.chaoxing.com/mooc2-ans/mycourse/stu?courseid=241777562&clazzid=95024404&cpi=205704091&enc=393bb505c4355b300c80097f55d3cd5c&t=1716110063602&pageHeader=-1&v=0", // 生成一个 URL
+              wordUrl: "https://hr-1313954536.cos.ap-guangzhou.myqcloud.com/%E6%AC%A2%E8%BF%8E%E6%82%A8%E7%9A%84%E5%88%B0%E6%9D%A5.docx", // 生成一个 URL
               week: week, // 使用传入的周次
               time: "@datetime('yyyy-MM-dd HH:mm:ss')", // 随机生成一个时间
             },
