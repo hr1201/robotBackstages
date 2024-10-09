@@ -10,7 +10,7 @@ if (import.meta.env.MODE === "development") {
   // 生产环境
   urls =
     import.meta.env.VITE_BASIC_URL ||
-    "https://mock.rarrot.ren/mock/66f26b73cf4407324fb66b1c";
+    "https://1panel.rarrot.ren/mock/670690b6b448401c1e14e249";
   console.log("当前环境: production", urls);
 }
 

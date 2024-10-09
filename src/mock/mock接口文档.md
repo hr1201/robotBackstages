@@ -102,31 +102,18 @@ method`: `GET
 **GET 请求 `/WeekSummary/getUrlByWeekGroupId`**
 
 {
-  "code": 200,
-  "data|10-20": [
-    {
+  "data": {
+    "code": 200,
+    "data|10-20": [{
       "id": "@id",
       "summary": "@cparagraph", // 生成随机中文段落
       "userId": "@id",
       "userName": "@cname", // 随机生成中文名字
-      "wordUrl": "{
-  "code": 200,
-  "data|10-20": [
-    {
-      "id": "@id",
-      "summary": "@cparagraph", // 生成随机中文段落
-      "userId": "@id",
-      "userName": "@cname", // 随机生成中文名字
-      "wordUrl": "https://hr-1313954536.cos.ap-guangzhou.myqcloud.com/%E6%AC%A2%E8%BF%8E%E6%82%A8%E7%9A%84%E5%88%B0%E6%9D%A5.docx", // 固定URL
+      "wordUrl": "https://hr-1313954536.cos.ap-guangzhou.myqcloud.com/%E6%AC%A2%E8%BF%8E%E6%82%A8%E7%9A%84%E5%88%B0%E6%9D%A5.docx", // 生成指向示例 Word 文档的 URL
       "week": "@pick(['第1周', '第2周', '第3周', '第4周', '第5周'])", // 随机选择周次
       "time": "@datetime('yyyy-MM-dd HH:mm:ss')" // 随机生成日期时间
-    }
-  ]
-}", // 固定URL
-      "week": "@pick(['第1周', '第2周', '第3周', '第4周', '第5周'])", // 随机选择周次
-      "time": "@datetime('yyyy-MM-dd HH:mm:ss')" // 随机生成日期时间
-    }
-  ]
+    }]
+  }
 }
 
 
